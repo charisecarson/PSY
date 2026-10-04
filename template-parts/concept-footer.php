@@ -5,13 +5,21 @@ $page = gdpsy_concept_page();
 $preset = 'Здравствуйте, Анастасия! Мне понравился концепт «' . $title . '», хочу обсудить его для себя.';
 $portfolio_url = get_post_type_archive_link('portfolio') ?: home_url('/portfolio/');
 $concepts_url = add_query_arg('case-type', 'consept', $portfolio_url);
+$calculator_url = 'https://psy.greendiz.ru/#builder';
+
+$faq_url = apply_filters(
+    'gdpsy_concept_faq_url',
+    home_url('/faq/#concepts'),
+    $post_id
+);
+
 $price = gdpsy_money('concept');
 $base_price = gdpsy_money('base');
 $saving = gdpsy_price('base') - gdpsy_price('concept');
 $has_saving = gdpsy_price('concept') > 0 && $saving > 0;
 $quiz = gdpsy_concept_quiz_data($post_id);
 $css = '';
-foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
+foreach (array('css/global.css', 'css/concept-shell.css', 'css/concept-footer.css') as $file) {
     $css .= '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri($file)) . '?ver=' . esc_attr(gdpsy_asset_version($file)) . '">';
 }
 ?>
@@ -20,129 +28,152 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
     <?php echo $css; ?>
     <div class="gdd gdd--foot" id="gdd-foot">
       <?php get_template_part('template-parts/sprite'); ?>
+      <section class="gp-concept-footer" aria-label="О концепте">
+<div class="gp-concept-footer__inner">
+      
+              <section class="gp-concept-intro" aria-labelledby="gp-concept-title">
+                  <div class="gp-concept-intro__head">
+                      <span class="gp-concept-kicker">Концепт</span>
+      
+                      <a class="gp-concept-all" href="<?php echo esc_url($concepts_url); ?>">
+                          Все концепты <span aria-hidden="true">→</span>
+                      </a>
+                  </div>
+      
+                  <h2 class="gp-concept-title" id="gp-concept-title">
+                      Этот концепт может стать вашим сайтом.
+                  </h2>
+      
+                  <div class="gp-concept-intro__grid">
+                      <div>
+                          <p class="gp-concept-label">Адаптация</p>
+                          <p class="gp-concept-copy">
+                              Концепт можно адаптировать под вас: заменить фото и тексты, добавить информацию об образовании, специализации и формате работы. При необходимости подключу нужный функционал — от блога и онлайн-записи до оплаты и других интеграций.
+                          </p>
+                      </div>
+      
+                      <aside class="gp-concept-unique">
+                          <strong>Каждый концепт существует в одном экземпляре.</strong>
+                          <p>После покупки он уходит из портфолио — такого сайта больше ни у кого не будет.</p>
+                      </aside>
+                  </div>
+              </section>
+      
+              <section class="gp-concept-next" aria-labelledby="gp-concept-next-title">
+                  <h2 class="gp-concept-next__title" id="gp-concept-next-title">Что хотите узнать дальше?</h2>
+      
+                  <div class="gp-concept-accordion">
+                      <details class="gp-concept-item">
+                          <summary class="gp-concept-trigger">
+                              <span class="gp-concept-index">01</span>
+                              <span class="gp-concept-question">Можно добавить в этот концепт блог, запись, оплату?</span>
+                              <span class="gp-concept-icon" aria-hidden="true"></span>
+                          </summary>
+                          <div class="gp-concept-panel">
+                              <div class="gp-concept-panel__inner">
+                                  <p>Да, конечно. Вы можете сами выбрать нужные дополнения и посмотреть их стоимость в калькуляторе — или рассказать, что вам нужно, и обсудить задачу со мной.</p>
+      
+                                  <div class="gp-concept-actions">
+                                      <a class="gp-concept-action gp-concept-action--primary" href="<?php echo esc_url($calculator_url); ?>">
+                                          Калькулятор <span aria-hidden="true">→</span>
+                                      </a>
+      
+                                      <button
+                                          class="gp-concept-action"
+                                          type="button"
+                                          data-open-sheet
+                                          data-preset="<?php echo esc_attr($preset); ?>"
+                                      >
+                                          Обсудить <span aria-hidden="true">→</span>
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </details>
+      
+                      <details class="gp-concept-item">
+                          <summary class="gp-concept-trigger">
+                              <span class="gp-concept-index">02</span>
+                              <span class="gp-concept-question">Что будет после покупки?</span>
+                              <span class="gp-concept-icon" aria-hidden="true"></span>
+                          </summary>
+                          <div class="gp-concept-panel">
+                              <div class="gp-concept-panel__inner">
+                                  <div class="gp-concept-steps">
+                                      <div class="gp-concept-step">
+                                          <span class="gp-concept-step__number">01</span>
+                                          <strong>Выбираете концепт</strong>
+                                          <p>Согласуем изменения и дополнения.</p>
+                                      </div>
+                                      <div class="gp-concept-step">
+                                          <span class="gp-concept-step__number">02</span>
+                                          <strong>Я адаптирую сайт</strong>
+                                          <p>Вношу ваши материалы и нужные правки.</p>
+                                      </div>
+                                      <div class="gp-concept-step">
+                                          <span class="gp-concept-step__number">03</span>
+                                          <strong>Настраиваю функционал</strong>
+                                          <p>Подключаю всё необходимое.</p>
+                                      </div>
+                                      <div class="gp-concept-step">
+                                          <span class="gp-concept-step__number">04</span>
+                                          <strong>Вы получаете готовый сайт</strong>
+                                          <p>Проверяем результат и запускаем.</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </details>
+      
+                      <details class="gp-concept-item">
+                          <summary class="gp-concept-trigger">
+                              <span class="gp-concept-index">03</span>
+                              <span class="gp-concept-question">У меня много вопросов</span>
+                              <span class="gp-concept-icon" aria-hidden="true"></span>
+                          </summary>
+                          <div class="gp-concept-panel">
+                              <div class="gp-concept-panel__inner">
+                                  <p>Более подробную информацию я собрала в блоке с частыми вопросами.</p>
+      
+                                  <div class="gp-concept-actions">
+                                      <a class="gp-concept-action" href="<?php echo esc_url($faq_url); ?>">
+                                          Посмотреть ответы <span aria-hidden="true">→</span>
+                                      </a>
+                                  </div>
+                              </div>
+                          </div>
+                      </details>
+      
+                      <details class="gp-concept-item">
+                          <summary class="gp-concept-trigger">
+                              <span class="gp-concept-index">04</span>
+                              <span class="gp-concept-question">Хочу, чтобы этот концепт стал моим сайтом</span>
+                              <span class="gp-concept-icon" aria-hidden="true"></span>
+                          </summary>
+                          <div class="gp-concept-panel">
+                              <div class="gp-concept-panel__inner">
+                                  <p>Отлично. Расскажите немного о себе и о том, каким должен быть ваш сайт.</p>
+      
+                                  <div class="gp-concept-actions">
+                                      <button
+                                          class="gp-concept-action gp-concept-action--primary"
+                                          type="button"
+                                          data-open-sheet
+                                          data-preset="<?php echo esc_attr($preset); ?>"
+                                      >
+                                          Написать <span aria-hidden="true">→</span>
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </details>
+                  </div>
+              </section>
+      
+          </div>
+      </section>
+
       <footer class="gdf" id="gdd-footer">
-        <section class="gdf__sec gdf-offer" id="gdd-offer" aria-label="Стоимость и состав сайта">
-          <div class="wrap">
-            <div class="gdf-pair">
-              <article class="gdf-card gdf-card--offer" id="gdd-concept" aria-labelledby="gdd-offer-title">
-                <span class="gdd-tag"><?php echo esc_html($page['offer_tag']); ?></span>
-                <h2 class="gdf__title" id="gdd-offer-title"><?php echo esc_html($page['offer_title']); ?></h2>
-                <p class="gdf__lead"><?php echo esc_html($page['offer_text']); ?></p>
-                <?php if ($price) : ?>
-                  <div class="gdf-price">
-                    <?php if ($has_saving) : ?>
-                      <p class="gdf-price__row">
-                        <span>Лендинг под ключ</span>
-                        <s><?php echo esc_html($base_price); ?></s>
-                      </p>
-                    <?php endif; ?>
-                    <p class="gdf-price__row gdf-price__row--now">
-                      <span>Лендинг на основе концепта</span>
-                      <b><?php echo esc_html($price); ?></b>
-                    </p>
-                    <?php if ($has_saving) : ?>
-                      <p class="gdf-price__save">Выгода <?php echo esc_html(gdpsy_rub($saving)); ?></p>
-                    <?php endif; ?>
-                  </div>
-                <?php endif; ?>
-                <div class="gdf-lists">
-                  <div>
-                    <h3 class="gdf-sub"><?php echo esc_html($page['offer_list_title']); ?></h3>
-                    <ul class="gdf-list">
-                      <?php foreach ($page['offer_list'] as $item) : ?>
-                        <li>
-                          <svg class="ic" aria-hidden="true" focusable="false">
-                            <use href="#i-check" />
-                          </svg>
-                          <span><?php echo esc_html($item); ?></span>
-                        </li>
-                      <?php endforeach; ?>
-                    </ul>
-                  </div>
-                  <div id="gdd-change">
-                    <h3 class="gdf-sub"><?php echo esc_html($page['change_title']); ?></h3>
-                    <ul class="gdf-list">
-                      <?php foreach ($page['change_list'] as $item) : ?>
-                        <li>
-                          <svg class="ic" aria-hidden="true" focusable="false">
-                            <use href="#i-check" />
-                          </svg>
-                          <span><?php echo esc_html($item); ?></span>
-                        </li>
-                      <?php endforeach; ?>
-                    </ul>
-                    <p class="gdf-hint"><?php echo esc_html($page['change_note']); ?></p>
-                  </div>
-                </div>
-                <div class="gdf__act">
-                  <button class="btn btn--main" type="button" data-open-sheet data-preset="<?php echo esc_attr($preset); ?>">Забрать концепт</button>
-                </div>
-              </article>
-              <span class="gdf-plus" aria-hidden="true">+</span>
-              <article class="gdf-card gdf-card--quiz" id="gdd-quiz" aria-labelledby="gdd-quiz-title">
-                <span class="gdd-tag"><?php echo esc_html($page['quiz_tag']); ?></span>
-                <h2 class="gdf__title" id="gdd-quiz-title"><?php echo esc_html($page['quiz_title']); ?></h2>
-                <p class="gdf__lead"><?php echo esc_html($page['quiz_lead']); ?></p>
-                <div class="gdq" id="gdd-quiz-box" data-quiz="<?php echo esc_attr(wp_json_encode($quiz)); ?>">
-                  <button class="btn btn--main" type="button" data-q="start">Пройти тест</button>
-                </div>
-                <p class="visually-hidden" id="gdd-quiz-status" aria-live="polite"></p>
-              </article>
-            </div>
-            <aside class="gdf-unique" aria-labelledby="gdd-unique-title">
-              <div class="gdf-unique__stamp" aria-hidden="true">
-                <b>1/1</b>
-                <small>экземпляр</small>
-              </div>
-              <div class="gdf-unique__body">
-                <p class="gdf-unique__status">
-                  <i aria-hidden="true"></i>
-                  <?php echo esc_html($page['unique_status']); ?>
-                </p>
-                <h3 id="gdd-unique-title"><?php echo esc_html($page['unique_title']); ?></h3>
-                <p><?php echo esc_html($page['offer_note']); ?></p>
-              </div>
-              <button class="btn btn--main" type="button" data-open-sheet data-preset="<?php echo esc_attr($preset); ?>"><?php echo esc_html($page['unique_button']); ?></button>
-            </aside>
-          </div>
-        </section>
-        <section class="gdf__sec gdf-steps" id="gdd-steps" aria-labelledby="gdd-steps-title">
-          <div class="wrap">
-            <h2 class="gdf__title" id="gdd-steps-title"><?php echo esc_html($page['steps_title']); ?></h2>
-            <ol class="gdf-tl">
-              <?php foreach ($page['steps'] as $step) : ?>
-                <li>
-                  <b><?php echo esc_html($step['title'] ?? ''); ?></b>
-                  <p><?php echo esc_html($step['text'] ?? ''); ?></p>
-                </li>
-              <?php endforeach; ?>
-            </ol>
-          </div>
-        </section>
-        <section class="gdf__sec gdf-faq-sec" id="gdd-faq" aria-labelledby="gdd-faq-title">
-          <div class="wrap">
-            <h2 class="gdf__title" id="gdd-faq-title"><?php echo esc_html($page['faq_title']); ?></h2>
-            <div class="gdf-faq">
-              <?php foreach ($page['faq'] as $row) : ?>
-                <details>
-                  <summary>
-                    <span><?php echo esc_html($row['q'] ?? ''); ?></span>
-                    <svg class="ic" aria-hidden="true" focusable="false">
-                      <use href="#i-adown" />
-                    </svg>
-                  </summary>
-                  <p><?php echo nl2br(esc_html($row['a'] ?? '')); ?></p>
-                </details>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </section>
-        <section class="gdf__sec gdf-more" aria-label="Другие концепты">
-          <div class="wrap gdf-more__in">
-            <p><?php echo esc_html($page['more_text']); ?></p>
-            <a class="btn btn--ghost" href="<?php echo esc_url($concepts_url); ?>"><?php echo esc_html($page['more_button']); ?></a>
-          </div>
-        </section>
         <section class="gdf__sec gdf-contact" id="gdd-contact" aria-label="Связаться">
           <div class="wrap">
             <?php get_template_part('template-parts/contact-block', null, array('message' => $preset)); ?>

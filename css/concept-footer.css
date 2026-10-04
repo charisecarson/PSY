@@ -1,0 +1,413 @@
+.gp-concept-footer {
+    --gp-bg: #121416;
+    --gp-text: #f2efe7;
+    --gp-muted: #b8bdc3;
+    --gp-dim: #858c95;
+    --gp-label: #6f757c;
+    --gp-line: #34383e;
+    --gp-line-strong: #454950;
+    --gp-accent: #e9e6dd;
+    --gp-container: min(1360px, calc(100vw - 180px));
+    --gp-serif: var(--serif, Georgia, "Times New Roman", serif);
+    --gp-sans: var(--sans, Inter, Arial, Helvetica, sans-serif);
+
+    width: 100%;
+    padding: 72px 0 120px;
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-bg);
+    color: var(--gp-text);
+    font-family: var(--gp-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+.gp-concept-footer *,
+.gp-concept-footer *::before,
+.gp-concept-footer *::after {
+    box-sizing: border-box;
+}
+
+.gp-concept-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.gp-concept-footer button {
+    font: inherit;
+}
+
+.gp-concept-footer__inner {
+    width: var(--gp-container);
+    margin: 0 auto;
+}
+
+.gp-concept-intro__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.gp-concept-kicker,
+.gp-concept-label {
+    display: block;
+    margin: 0;
+    color: var(--gp-label);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+}
+
+.gp-concept-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    flex: none;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #5a5f66;
+    color: #aeb4bb;
+    font-size: 14px;
+    line-height: 1;
+    transition: color .2s ease, border-color .2s ease;
+}
+
+.gp-concept-all:hover {
+    color: var(--gp-text);
+    border-color: #aeb4bb;
+}
+
+.gp-concept-title {
+    max-width: 1280px;
+    margin: 0;
+    font-family: var(--gp-serif);
+    font-size: clamp(56px, 6.35vw, 104px);
+    font-weight: 700;
+    line-height: .95;
+    letter-spacing: -.032em;
+    text-wrap: balance;
+}
+
+.gp-concept-intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: clamp(50px, 9vw, 150px);
+    align-items: start;
+    margin-top: 54px;
+}
+
+.gp-concept-label {
+    margin-bottom: 16px;
+}
+
+.gp-concept-copy {
+    max-width: 740px;
+    margin: 0;
+    color: var(--gp-muted);
+    font-size: 19px;
+    line-height: 1.52;
+}
+
+.gp-concept-unique {
+    padding-left: 24px;
+    border-left: 1px solid var(--gp-line-strong);
+}
+
+.gp-concept-unique::before {
+    content: 'ЕДИНСТВЕННЫЙ ЭКЗЕМПЛЯР';
+    display: block;
+    margin-bottom: 14px;
+    color: var(--gp-label);
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: .22em;
+}
+
+.gp-concept-unique strong {
+    display: block;
+    margin: 0 0 10px;
+    color: var(--gp-text);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.gp-concept-unique p {
+    margin: 0;
+    color: var(--gp-dim);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.gp-concept-next {
+    margin-top: clamp(150px, 16vw, 220px);
+}
+
+.gp-concept-next__title {
+    margin: 0 0 36px;
+    font-family: var(--gp-serif);
+    font-size: clamp(40px, 3.7vw, 60px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.024em;
+    text-wrap: balance;
+}
+
+.gp-concept-accordion {
+    border-top: 1px solid var(--gp-line);
+}
+
+.gp-concept-item {
+    margin: 0;
+    border-bottom: 1px solid var(--gp-line);
+}
+
+.gp-concept-trigger {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 18px;
+    min-height: 92px;
+    padding: 20px 0;
+    color: var(--gp-text);
+    cursor: pointer;
+    list-style: none;
+}
+
+.gp-concept-trigger::-webkit-details-marker {
+    display: none;
+}
+
+.gp-concept-index {
+    color: #737981;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: .12em;
+}
+
+.gp-concept-question {
+    font-size: clamp(18px, 1.45vw, 22px);
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.gp-concept-icon {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    color: #999fa6;
+}
+
+.gp-concept-icon::before,
+.gp-concept-icon::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    transform: translate(-50%, -50%);
+}
+
+.gp-concept-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: transform .24s ease;
+}
+
+.gp-concept-item[open] .gp-concept-icon::after {
+    transform: translate(-50%, -50%) rotate(0);
+}
+
+.gp-concept-panel {
+    padding: 0 0 42px 66px;
+}
+
+.gp-concept-panel__inner {
+    max-width: 1100px;
+    color: #aeb4bb;
+    font-size: 16px;
+    line-height: 1.58;
+}
+
+.gp-concept-panel__inner > p {
+    max-width: 760px;
+    margin: 0 0 20px;
+}
+
+.gp-concept-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.gp-concept-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid #454a51;
+    border-radius: 999px;
+    background: transparent;
+    color: #d8d5cd;
+    font-size: 13px;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.gp-concept-action:hover {
+    border-color: var(--gp-accent);
+    background: var(--gp-accent);
+    color: #111315;
+}
+
+.gp-concept-action--primary {
+    border-color: var(--gp-accent);
+    background: var(--gp-accent);
+    color: #111315;
+}
+
+.gp-concept-action--primary:hover {
+    border-color: #fff;
+    background: #fff;
+}
+
+.gp-concept-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 26px;
+    max-width: 1100px;
+}
+
+.gp-concept-step {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.gp-concept-step__number {
+    color: var(--gp-label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: .12em;
+}
+
+.gp-concept-step strong {
+    color: var(--gp-text);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.gp-concept-step p {
+    margin: 0;
+    color: #828992;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .gp-concept-footer {
+        --gp-container: calc(100vw - 40px);
+        padding-top: 32px;
+        padding-bottom: 72px;
+    }
+
+    .gp-concept-intro__head {
+        margin-bottom: 28px;
+    }
+
+    .gp-concept-kicker {
+        font-size: 9px;
+    }
+
+    .gp-concept-all {
+        font-size: 13px;
+    }
+
+    .gp-concept-title {
+        font-size: clamp(48px, 14.5vw, 76px);
+        line-height: .96;
+    }
+
+    .gp-concept-intro__grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        margin-top: 40px;
+    }
+
+    .gp-concept-copy {
+        font-size: 17px;
+        line-height: 1.5;
+    }
+
+    .gp-concept-unique {
+        max-width: 360px;
+        padding-left: 18px;
+    }
+
+    .gp-concept-unique::before {
+        font-size: 9px;
+        letter-spacing: .18em;
+    }
+
+    .gp-concept-next {
+        margin-top: 108px;
+    }
+
+    .gp-concept-next__title {
+        margin-bottom: 26px;
+    }
+
+    .gp-concept-trigger {
+        grid-template-columns: 34px minmax(0, 1fr) 22px;
+        gap: 12px;
+        min-height: 80px;
+    }
+
+    .gp-concept-question {
+        font-size: 18px;
+        line-height: 1.3;
+    }
+
+    .gp-concept-panel {
+        padding-bottom: 28px;
+        padding-left: 46px;
+    }
+
+    .gp-concept-panel__inner {
+        max-width: none;
+        font-size: 15px;
+    }
+
+    .gp-concept-steps {
+        grid-template-columns: 1fr 1fr;
+        gap: 26px 20px;
+    }
+}
+
+@media (max-width: 520px) {
+    .gp-concept-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .gp-concept-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .gp-concept-action {
+        width: 100%;
+    }
+}
+
+@media (hover: hover) {
+    .gp-concept-trigger:hover .gp-concept-question {
+        opacity: .78;
+    }
+}

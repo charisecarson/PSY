@@ -31,6 +31,30 @@ function gdpsy_concept_insert($html, $pattern, $insert, $after = true)
     return substr($html, 0, $pos) . $insert . substr($html, $pos);
 }
 
+function gdpsy_concept_adminbar()
+{
+    if (!is_admin_bar_showing()) {
+        return array('', '');
+    }
+    if (class_exists('QM_Dispatchers')) {
+        $qm = QM_Dispatchers::get('html');
+        if ($qm) {
+            $qm->did_footer = true;
+        }
+    }
+    wp_enqueue_style('admin-bar');
+    wp_enqueue_script('admin-bar');
+    ob_start();
+    wp_print_styles();
+    echo '<style>html{margin-top:32px!important}@media(max-width:782px){html{margin-top:46px!important}}</style>';
+    $style = ob_get_clean();
+    ob_start();
+    wp_admin_bar_render();
+    wp_print_scripts();
+    $bar = ob_get_clean();
+    return array($style, $bar);
+}
+
 function gdpsy_render_concept($post_id)
 {
     $file = gdpsy_concept_file($post_id);
@@ -42,19 +66,45 @@ function gdpsy_render_concept($post_id)
         return false;
     }
 
-    ob_start();
-    get_template_part('template-parts/concept-shell', null, array('post_id' => $post_id));
-    $shell = ob_get_clean();
+    $raw = isset($_GET['gdd-raw']);
+    $shell = '';
+    $footer = '';
 
-    ob_start();
-    get_template_part('template-parts/concept-footer', null, array('post_id' => $post_id));
-    $footer = ob_get_clean();
+    if (!$raw) {
+        ob_start();
+        get_template_part('template-parts/concept-shell', null, array('post_id' => $post_id));
+        $shell = ob_get_clean();
+
+        ob_start();
+        get_template_part('template-parts/concept-footer', null, array('post_id' => $post_id));
+        $footer = ob_get_clean();
+    }
 
     $head = '<meta name="robots" content="noindex, follow">'
-        . '<title>' . esc_html(wp_get_document_title()) . '</title>'
-        . '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('css/fonts.css')) . '?ver=' . gdpsy_asset_version('css/fonts.css') . '">'
-        . '<style>html.gdd-lock{overflow:hidden}</style>'
-        . '<script src="' . esc_url(get_theme_file_uri('js/concept-shell.js')) . '?ver=' . gdpsy_asset_version('js/concept-shell.js') . '" defer></script>';
+        . '<title>' . esc_html(wp_get_document_title()) . '</title>';
+
+    if ($raw) {
+        $head .= '<style>html,body,*{scrollbar-width:none!important;-ms-overflow-style:none!important}*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}</style>';
+    }
+
+    if (!$raw) {
+        $stage_css = 'html.gdd-lock{overflow:hidden}'
+            . '#gdd-stage{display:none}'
+            . 'html.gdd-mobile #gdd-stage{display:flex;justify-content:center;background:#141517}'
+            . '#gdd-stage{box-sizing:border-box;padding:20px 0;align-items:center}'
+            . '#gdd-stage .gdd-phone{box-sizing:border-box;width:414px;max-width:100%;height:min(100%,868px);padding:12px;border-radius:54px;background:#050506;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 24px 60px rgba(0,0,0,.5);overflow:hidden;position:relative}'
+            . '#gdd-stage .gdd-phone::after{content:"";position:absolute;inset:12px;border-radius:42px;box-shadow:0 0 0 40px #050506;pointer-events:none}'
+            . '#gdd-stage iframe{display:block;width:100%;height:100%;border:0;border-radius:42px;background:#fff}'
+            . 'html.gdd-mobile body>*:not(#gdd-host):not(#gdd-foot-host):not(#gdd-stage):not(#wpadminbar):not([id^="query-monitor"]):not([id^="qm"]):not(script):not(style):not(link):not(template):not(noscript){display:none!important}';
+        $head .= '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('css/fonts.css')) . '?ver=' . gdpsy_asset_version('css/fonts.css') . '">'
+            . '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('css/concept-footer.css')) . '?ver=' . gdpsy_asset_version('css/concept-footer.css') . '">'
+            . '<style>' . $stage_css . '</style>'
+            . '<script src="' . esc_url(get_theme_file_uri('js/concept-shell.js')) . '?ver=' . gdpsy_asset_version('js/concept-shell.js') . '" defer></script>';
+
+        list($bar_head, $bar_body) = gdpsy_concept_adminbar();
+        $head .= $bar_head;
+        $shell = $bar_body . $shell;
+    }
 
     if (!preg_match('/<head\b/i', $html)) {
         $doc = '<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">'
@@ -63,13 +113,17 @@ function gdpsy_render_concept($post_id)
     } else {
         $doc = preg_replace('#<title\b[^>]*>.*?</title>#is', '', $html, 1);
         $doc = gdpsy_concept_insert($doc, '/<head\b[^>]*>/i', $head) ?: $doc;
-        $with_shell = gdpsy_concept_insert($doc, '/<body\b[^>]*>/i', $shell);
-        if ($with_shell === false) {
-            $with_shell = gdpsy_concept_insert($doc, '#</head>#i', $shell);
+        if ($shell !== '') {
+            $with_shell = gdpsy_concept_insert($doc, '/<body\b[^>]*>/i', $shell);
+            if ($with_shell === false) {
+                $with_shell = gdpsy_concept_insert($doc, '#</head>#i', $shell);
+            }
+            $doc = $with_shell !== false ? $with_shell : $doc . $shell;
         }
-        $doc = $with_shell !== false ? $with_shell : $doc . $shell;
-        $pos = strripos($doc, '</body>');
-        $doc = $pos !== false ? substr($doc, 0, $pos) . $footer . substr($doc, $pos) : $doc . $footer;
+        if ($footer !== '') {
+            $pos = strripos($doc, '</body>');
+            $doc = $pos !== false ? substr($doc, 0, $pos) . $footer . substr($doc, $pos) : $doc . $footer;
+        }
     }
 
     status_header(200);

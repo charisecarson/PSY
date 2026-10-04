@@ -4,6 +4,24 @@ $info = gdpsy_field('consept-info', $post_id);
 $info = is_array($info) ? $info : array();
 $palette = !empty($info['palette']) && is_array($info['palette']) ? $info['palette'] : array();
 $title = get_the_title($post_id);
+$colors = array();
+foreach ($palette as $swatch) {
+    $color = is_array($swatch) ? ($swatch['color'] ?? '') : $swatch;
+    if ($color) {
+        $colors[] = $color;
+    }
+}
+$problem = trim(wp_strip_all_tags((string) ($info['speczializacziya'] ?? '')));
+$idea = trim(wp_strip_all_tags((string) ($info['ideya'] ?? '')));
+$mech = array();
+if (!empty($info['mehaniki'])) {
+    $mech = preg_split('/\R+/u', trim(wp_strip_all_tags((string) $info['mehaniki'])));
+    if (count($mech) === 1 && strpos($mech[0], ',') !== false) {
+        $mech = explode(',', $mech[0]);
+    }
+    $mech = array_values(array_filter(array_map('trim', $mech)));
+}
+$has_card = $mech || $colors;
 $page = gdpsy_concept_page();
 $preset = 'Здравствуйте, Анастасия! Мне понравился концепт «' . $title . '», хочу обсудить его для себя.';
 $question = 'Здравствуйте, Анастасия! У меня вопрос по концепту «' . $title . '»: ';
@@ -48,43 +66,66 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
           </div>
         </div>
         <section class="gdd-intro" aria-labelledby="gdd-title">
-          <div class="wrap">
-            <div class="gdd-intro__meta">
-              <span class="gdd-tag">Концепт</span>
-              <?php if (!empty($info['speczializacziya'])) : ?>
-                <span><?php echo esc_html($info['speczializacziya']); ?></span>
+          <div class="wrap gdd-intro__grid<?php echo $has_card ? ' has-card' : ''; ?>">
+            <div class="gdd-intro__main">
+              <nav class="gdd-crumbs" aria-label="Хлебные крошки">
+                <a href="<?php echo esc_url(home_url('/')); ?>">Главная</a>
+                <span aria-hidden="true">—</span>
+                <a href="<?php echo esc_url(add_query_arg('case-type', 'consept', $portfolio_url)); ?>">Концепты</a>
+              </nav>
+              <h1 class="gdd-intro__title" id="gdd-title"><?php echo esc_html($title); ?></h1>
+              <?php if ($problem || $idea) : ?>
+                <dl class="gdd-facts">
+                  <?php if ($problem) : ?>
+                    <div>
+                      <dt class="gdd-label">Проблематика</dt>
+                      <dd><?php echo esc_html($problem); ?></dd>
+                    </div>
+                  <?php endif; ?>
+                  <?php if ($idea) : ?>
+                    <div>
+                      <dt class="gdd-label">Идея</dt>
+                      <dd><?php echo nl2br(esc_html($idea)); ?></dd>
+                    </div>
+                  <?php endif; ?>
+                </dl>
               <?php endif; ?>
             </div>
-            <h1 class="gdd-intro__title" id="gdd-title"><?php echo esc_html($title); ?></h1>
-            <?php if (!empty($info['opisanie'])) : ?>
-              <p class="gdd-intro__lead"><?php echo nl2br(esc_html(wp_strip_all_tags($info['opisanie']))); ?></p>
-            <?php endif; ?>
-            <?php if ($palette) : ?>
-              <div class="gdd-pal" aria-hidden="true">
-                <?php foreach ($palette as $swatch) : ?>
-                  <?php $color = is_array($swatch) ? ($swatch['color'] ?? '') : $swatch; ?>
-                  <?php if ($color) : ?>
-                    <i style="background:<?php echo esc_attr($color); ?>"></i>
-                  <?php endif; ?>
-                <?php endforeach; ?>
-              </div>
+            <?php if ($has_card) : ?>
+              <aside class="gdd-card" aria-label="Характеристики концепта">
+                <?php if ($mech) : ?>
+                  <div>
+                    <span class="gdd-label">Механики</span>
+                    <ul class="gdd-chips">
+                      <?php foreach ($mech as $item) : ?>
+                        <li class="gdd-chip"><?php echo esc_html($item); ?></li>
+                      <?php endforeach; ?>
+                    </ul>
+                  </div>
+                <?php endif; ?>
+                <?php if ($colors) : ?>
+                  <div>
+                    <span class="gdd-label">Палитра</span>
+                    <div class="gdd-pal" aria-hidden="true">
+                      <?php foreach ($colors as $color) : ?>
+                        <i style="background:<?php echo esc_attr($color); ?>"></i>
+                      <?php endforeach; ?>
+                    </div>
+                  </div>
+                <?php endif; ?>
+              </aside>
             <?php endif; ?>
             <div class="gdd-intro__act">
-              <button class="btn btn--main" type="button" data-open-sheet data-preset="<?php echo esc_attr($preset); ?>">Забрать концепт</button>
-              <a class="link" href="<?php echo esc_url(add_query_arg('case-type', 'consept', $portfolio_url)); ?>">Все концепты</a>
+              <button class="btn btn--main" type="button" data-open-sheet data-preset="<?php echo esc_attr($preset); ?>">Хочу такой сайт</button>
             </div>
           </div>
         </section>
         <p class="gdd-note">
-          Ниже концепт целиком — листайте как обычный сайт
           <svg class="ic" aria-hidden="true" focusable="false">
-            <use href="#i-arrow" />
+            <use href="#i-info" />
           </svg>
+          <span><?php echo esc_html($page['notice_text']); ?></span>
         </p>
-      </div>
-      <div class="gdd-hint" id="hint" role="region" aria-label="О концепте" hidden>
-        <p><?php echo esc_html($page['notice_text']); ?></p>
-        <button class="btn btn--sm" type="button" data-hint="ok"><?php echo esc_html($page['notice_button']); ?></button>
       </div>
       <div class="gdd-fab is-hidden" id="fab">
         <div class="gdd-pop" id="pop" role="menu" aria-label="О концепте" hidden>
@@ -92,7 +133,14 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
           <button type="button" role="menuitem" data-goto="#gdd-change">Что можно на нём изменить?</button>
           <button type="button" role="menuitem" data-open-sheet data-preset="<?php echo esc_attr($question); ?>">Задать вопрос</button>
         </div>
-        <button class="gdd-plate" id="plate" type="button" aria-expanded="false" aria-controls="pop">Про концепт</button>
+        <div class="gdd-fab__row">
+          <button class="gdd-view" id="view" type="button" aria-label="Показать мобильную версию" title="Показать мобильную версию">
+            <svg class="ic" aria-hidden="true" focusable="false">
+              <use href="#i-mobile" />
+            </svg>
+          </button>
+          <button class="gdd-plate" id="plate" type="button" aria-expanded="false" aria-controls="pop">Про концепт</button>
+        </div>
       </div>
       <?php get_template_part('template-parts/menu'); ?>
       <?php get_template_part('template-parts/sheet'); ?>

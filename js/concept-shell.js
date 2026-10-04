@@ -454,7 +454,7 @@
       setMenu(!menu.classList.contains('is-open'));
       return;
     }
-    if (t.closest('#view')) {
+    if (t.closest('[data-view]')) {
       setView(!mobile);
       return;
     }
@@ -522,7 +522,7 @@
     }
   });
 
-  var view = find('#view');
+  var views = all('[data-view]');
   var stage = null;
   var mobile = false;
   var wide = window.matchMedia('(min-width: 960px)');
@@ -699,12 +699,18 @@
     mobile = on;
     if (on) ensureStage();
     html.classList.toggle('gdd-mobile', on);
-    if (view) {
-      var label = on ? 'Показать десктопную версию' : 'Показать мобильную версию';
-      view.setAttribute('aria-label', label);
-      view.title = label;
-      view.querySelector('use').setAttribute('href', on ? '#i-monitor' : '#i-mobile');
-    }
+    views.forEach(function (v) {
+      var txt = v.querySelector('[data-view-text]');
+      var icon = v.querySelector('use');
+      if (txt) {
+        txt.textContent = on ? 'Посмотреть десктопную версию' : 'Посмотреть мобильную версию';
+      } else {
+        var label = on ? 'Показать десктопную версию' : 'Показать мобильную версию';
+        v.setAttribute('aria-label', label);
+        v.title = label;
+      }
+      if (icon) icon.setAttribute('href', on ? '#i-monitor' : '#i-mobile');
+    });
     setPop(false);
     if (on) sizeStage();
     if (syncFab) syncFab();

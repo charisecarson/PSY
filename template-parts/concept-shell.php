@@ -13,15 +13,9 @@ foreach ($palette as $swatch) {
 }
 $problem = trim(wp_strip_all_tags((string) ($info['speczializacziya'] ?? '')));
 $idea = trim(wp_strip_all_tags((string) ($info['ideya'] ?? '')));
-$mech = array();
-if (!empty($info['mehaniki'])) {
-    $mech = preg_split('/\R+/u', trim(wp_strip_all_tags((string) $info['mehaniki'])));
-    if (count($mech) === 1 && strpos($mech[0], ',') !== false) {
-        $mech = explode(',', $mech[0]);
-    }
-    $mech = array_values(array_filter(array_map('trim', $mech)));
-}
-$has_card = $mech || $colors;
+$mech_raw = $info['filtr_mehaniki'] ?? gdpsy_field('filtr_mehaniki', $post_id);
+$mech = gdpsy_concept_labels($mech_raw, gdpsy_concept_choices('filtr_mehaniki', 'consept-info', $post_id));
+$has_card = $problem || $mech || $colors;
 $page = gdpsy_concept_page();
 $preset = 'Здравствуйте, Анастасия! Мне понравился концепт «' . $title . '», хочу обсудить его для себя.';
 $question = 'Здравствуйте, Анастасия! У меня вопрос по концепту «' . $title . '»: ';
@@ -74,25 +68,23 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
                 <a href="<?php echo esc_url(add_query_arg('case-type', 'consept', $portfolio_url)); ?>">Концепты</a>
               </nav>
               <h1 class="gdd-intro__title" id="gdd-title"><?php echo esc_html($title); ?></h1>
-              <?php if ($problem || $idea) : ?>
+              <?php if ($idea) : ?>
                 <dl class="gdd-facts">
-                  <?php if ($problem) : ?>
-                    <div>
-                      <dt class="gdd-label">Проблематика</dt>
-                      <dd><?php echo esc_html($problem); ?></dd>
-                    </div>
-                  <?php endif; ?>
-                  <?php if ($idea) : ?>
-                    <div>
-                      <dt class="gdd-label">Идея</dt>
-                      <dd><?php echo nl2br(esc_html($idea)); ?></dd>
-                    </div>
-                  <?php endif; ?>
+                  <div>
+                    <dt class="gdd-label">Идея</dt>
+                    <dd><?php echo nl2br(esc_html($idea)); ?></dd>
+                  </div>
                 </dl>
               <?php endif; ?>
             </div>
             <?php if ($has_card) : ?>
               <aside class="gdd-card" aria-label="Характеристики концепта">
+                <?php if ($problem) : ?>
+                  <div>
+                    <span class="gdd-label">Проблематика</span>
+                    <p class="gdd-card__text"><?php echo esc_html($problem); ?></p>
+                  </div>
+                <?php endif; ?>
                 <?php if ($mech) : ?>
                   <div>
                     <span class="gdd-label">Механики</span>
@@ -117,6 +109,12 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
             <?php endif; ?>
             <div class="gdd-intro__act">
               <button class="btn btn--main" type="button" data-open-sheet data-preset="<?php echo esc_attr($preset); ?>">Хочу такой сайт</button>
+              <button class="gdd-view-link" type="button" data-view>
+                <svg class="ic" aria-hidden="true" focusable="false">
+                  <use href="#i-mobile" />
+                </svg>
+                <span data-view-text>Посмотреть мобильную версию</span>
+              </button>
             </div>
           </div>
         </section>
@@ -134,7 +132,7 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
           <button type="button" role="menuitem" data-open-sheet data-preset="<?php echo esc_attr($question); ?>">Задать вопрос</button>
         </div>
         <div class="gdd-fab__row">
-          <button class="gdd-view" id="view" type="button" aria-label="Показать мобильную версию" title="Показать мобильную версию">
+          <button class="gdd-view" id="view" type="button" data-view aria-label="Показать мобильную версию" title="Показать мобильную версию">
             <svg class="ic" aria-hidden="true" focusable="false">
               <use href="#i-mobile" />
             </svg>

@@ -8,6 +8,58 @@ function gdpsy_field($name, $post_id = false)
     return function_exists('get_field') ? get_field($name, $post_id) : null;
 }
 
+function gdpsy_concept_labels($value, $labels = array())
+{
+    if ($value === null || $value === false || $value === '') {
+        return array();
+    }
+    if (!is_array($value)) {
+        $value = preg_split('/\R+/u', trim((string) $value));
+        if (count($value) === 1 && strpos($value[0], ',') !== false) {
+            $value = explode(',', $value[0]);
+        }
+    } elseif (isset($value['value']) || isset($value['label'])) {
+        $value = array($value);
+    }
+    $out = array();
+    foreach ($value as $item) {
+        if ($item instanceof WP_Term) {
+            $text = $item->name;
+        } elseif (is_array($item)) {
+            $text = $item['label'] ?? $item['value'] ?? '';
+        } elseif (is_numeric($item) && ($term = get_term((int) $item)) && !is_wp_error($term)) {
+            $text = $term->name;
+        } else {
+            $text = (string) $item;
+        }
+        $text = trim(wp_strip_all_tags((string) $text));
+        if ($text !== '' && isset($labels[$text])) {
+            $text = trim(wp_strip_all_tags((string) $labels[$text]));
+        }
+        if ($text !== '') {
+            $out[] = $text;
+        }
+    }
+    return array_values(array_unique($out));
+}
+
+function gdpsy_concept_choices($name, $group, $post_id)
+{
+    if (!function_exists('get_field_object')) {
+        return array();
+    }
+    $obj = get_field_object($group, $post_id);
+    if (!empty($obj['sub_fields']) && is_array($obj['sub_fields'])) {
+        foreach ($obj['sub_fields'] as $sub) {
+            if (($sub['name'] ?? '') === $name && !empty($sub['choices']) && is_array($sub['choices'])) {
+                return $sub['choices'];
+            }
+        }
+    }
+    $obj = get_field_object($name, $post_id);
+    return !empty($obj['choices']) && is_array($obj['choices']) ? $obj['choices'] : array();
+}
+
 function gdpsy_option($name)
 {
     return gdpsy_field($name, 'option');

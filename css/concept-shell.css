@@ -203,23 +203,26 @@
 }
 
 .gdd-note {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px var(--pad);
-  border-block: 1px solid var(--line);
+  border-block: 1px solid var(--line-soft);
   background: var(--mist);
   color: var(--graphite);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.gdd-note__in {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding-block: 14px;
+  text-align: left;
 }
 
 .gdd-note .ic {
   flex: none;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
+  width: 20px;
+  height: 20px;
 }
 
 @media (min-width: 600px) {
@@ -255,6 +258,7 @@
   .gdd-intro__grid.has-card .gdd-card {
     grid-area: card;
     align-self: stretch;
+    align-content: space-between;
     padding: 28px;
   }
 

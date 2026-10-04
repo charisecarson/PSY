@@ -118,12 +118,14 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
             </div>
           </div>
         </section>
-        <p class="gdd-note">
-          <svg class="ic" aria-hidden="true" focusable="false">
-            <use href="#i-info" />
-          </svg>
-          <span><?php echo esc_html($page['notice_text']); ?></span>
-        </p>
+        <div class="gdd-note">
+          <div class="wrap gdd-note__in">
+            <svg class="ic" aria-hidden="true" focusable="false">
+              <use href="#i-info" />
+            </svg>
+            <p><?php echo esc_html($page['notice_text']); ?></p>
+          </div>
+        </div>
       </div>
       <div class="gdd-fab is-hidden" id="fab">
         <div class="gdd-pop" id="pop" role="menu" aria-label="О концепте" hidden>

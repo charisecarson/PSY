@@ -7,7 +7,6 @@
     --gp-line: #34383e;
     --gp-line-strong: #454950;
     --gp-accent: #e9e6dd;
-    --gp-container: min(1360px, calc(100vw - 180px));
     --gp-serif: var(--serif, Georgia, "Times New Roman", serif);
     --gp-sans: var(--sans, Inter, Arial, Helvetica, sans-serif);
 
@@ -36,8 +35,10 @@
 }
 
 .gp-concept-footer__inner {
-    width: var(--gp-container);
-    margin: 0 auto;
+    width: 100%;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--pad);
 }
 
 .gp-concept-intro__head {
@@ -313,7 +314,6 @@
 
 @media (max-width: 800px) {
     .gp-concept-footer {
-        --gp-container: calc(100vw - 40px);
         padding-top: 32px;
         padding-bottom: 72px;
     }

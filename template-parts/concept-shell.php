@@ -143,7 +143,7 @@ foreach (array('css/global.css', 'css/concept-shell.css') as $file) {
         </div>
       </div>
       <?php get_template_part('template-parts/menu'); ?>
-      <?php get_template_part('template-parts/sheet'); ?>
+      <?php get_template_part('template-parts/sheet', null, gdpsy_concept_contact_args()); ?>
     </div>
   </template>
 </div>

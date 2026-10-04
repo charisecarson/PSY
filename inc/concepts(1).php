@@ -97,6 +97,7 @@ function gdpsy_render_concept($post_id)
             . '#gdd-stage iframe{display:block;width:100%;height:100%;border:0;border-radius:42px;background:#fff}'
             . 'html.gdd-mobile body>*:not(#gdd-host):not(#gdd-foot-host):not(#gdd-stage):not(#wpadminbar):not([id^="query-monitor"]):not([id^="qm"]):not(script):not(style):not(link):not(template):not(noscript){display:none!important}';
         $head .= '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('css/fonts.css')) . '?ver=' . gdpsy_asset_version('css/fonts.css') . '">'
+            . '<link rel="stylesheet" href="' . esc_url(get_theme_file_uri('css/concept-footer.css')) . '?ver=' . gdpsy_asset_version('css/concept-footer.css') . '">'
             . '<style>' . $stage_css . '</style>'
             . '<script src="' . esc_url(get_theme_file_uri('js/concept-shell.js')) . '?ver=' . gdpsy_asset_version('js/concept-shell.js') . '" defer></script>';
 
@@ -247,13 +248,5 @@ function gdpsy_concept_quiz_data($post_id)
         'owner' => 'Анастасия',
         'modules' => gdpsy_concept_modules(),
         'questions' => gdpsy_concept_quiz(),
-    );
-}
-
-function gdpsy_concept_contact_args()
-{
-    return array(
-        'title' => 'Похоже, вы нашли свой сайт',
-        'sub' => 'Расскажите о себе — обсудим адаптацию концепта и всё необходимое для запуска сайта.',
     );
 }

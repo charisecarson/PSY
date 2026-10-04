@@ -4,6 +4,8 @@ $tg = gdpsy_telegram_url();
 $max = gdpsy_max_url();
 $email = gdpsy_email();
 $message = isset($args['message']) ? (string) $args['message'] : 'Здравствуйте, Анастасия! Мне нужен сайт, давайте обсудим.';
+$title = isset($args['title']) ? (string) $args['title'] : '';
+$sub = isset($args['sub']) ? (string) $args['sub'] : '';
 ?>
 <div class="cblock">
   <div class="cblock__l">
@@ -14,12 +16,22 @@ $message = isset($args['message']) ? (string) $args['message'] : 'Здравст
       </span>
     </p>
     <h2 class="sec__title">
-      Давайте <br class="br3">
-      обсудим <br class="br3">ваш сайт
+      <?php if ($title !== '') : ?>
+        <?php echo esc_html($title); ?>
+      <?php else : ?>
+        Давайте <br class="br3">
+        обсудим <br class="br3">ваш сайт
+      <?php endif; ?>
     </h2>
-    <p class="cblock__sub">Расскажите о задаче — даже пары предложений достаточно. Отвечу в течение рабочего
-      дня с
-      вопросами и следующим шагом. Без спама и отдела продаж.</p>
+    <p class="cblock__sub">
+      <?php if ($sub !== '') : ?>
+        <?php echo esc_html($sub); ?>
+      <?php else : ?>
+        Расскажите о задаче — даже пары предложений достаточно. Отвечу в течение рабочего
+        дня с
+        вопросами и следующим шагом. Без спама и отдела продаж.
+      <?php endif; ?>
+    </p>
   </div>
   <div class="cblock__r">
     <div class="copybox">

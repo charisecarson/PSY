@@ -769,4 +769,27 @@
   } else if (fab) {
     fab.classList.remove('is-hidden');
   }
+
+  var legalBtn = find('#legalBtn');
+  var legalPop = find('#legalPop');
+  if (legalBtn && legalPop) {
+    var setLegal = function (on) {
+      legalPop.hidden = !on;
+      legalBtn.setAttribute('aria-expanded', String(on));
+    };
+    legalBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setLegal(legalPop.hidden);
+    });
+    document.addEventListener('click', function (e) {
+      var path = e.composedPath ? e.composedPath() : [];
+      if (!legalPop.hidden && path.indexOf(legalPop) === -1) setLegal(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !legalPop.hidden) {
+        setLegal(false);
+        legalBtn.focus();
+      }
+    });
+  }
 })();

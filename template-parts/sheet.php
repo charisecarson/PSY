@@ -7,6 +7,6 @@
         <use href="#i-x" />
       </svg>
     </button>
-    <?php get_template_part('template-parts/contact-block'); ?>
+    <?php get_template_part('template-parts/contact-block', null, isset($args) && is_array($args) ? $args : array()); ?>
   </div>
 </div>
